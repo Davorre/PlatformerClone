@@ -8,7 +8,7 @@ using UnityEngine;
 // wumpa fruit
 public class WumpaFruit : MonoBehaviour
 {
-
+    public int totalWumpaFruit;
 
 
 
@@ -31,8 +31,6 @@ public class WumpaFruit : MonoBehaviour
            
     }
 
-    void OnTriggerEnter(Collider other)
-    {
-
-    }
+   
+    
 }
