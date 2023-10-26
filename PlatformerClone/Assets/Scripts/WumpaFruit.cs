@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 // Torres, David
@@ -21,7 +22,17 @@ public class WumpaFruit : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // rotate at 5 degrees
-        transform.Rotate(Vector3.right * 5 * Time.deltaTime);
+        // rotate at "X" amount of degrees
+        transform.Rotate(Vector3.right * 360 * Time.deltaTime);
+
+        
+            
+            
+           
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+
     }
 }
