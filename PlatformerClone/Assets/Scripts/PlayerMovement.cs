@@ -37,18 +37,31 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         // side to side movement
+        if (Input.GetKey(KeyCode.S))
+        {
+            // moves player backwards
+            transform.position += Vector3.back * speed * Time.deltaTime;
+        }
+        if (Input.GetKey(KeyCode.W))
+        {
+            // moves player frowards
+            transform.position += Vector3.forward * speed * Time.deltaTime;
+        }
         if (Input.GetKey(KeyCode.A))
         {
+            // moves player leftwards
             transform.position += Vector3.left * speed * Time.deltaTime;
         }
 
         if (Input.GetKey(KeyCode.D))
         {
+            // moves players rightwards
             transform.position += Vector3.right * speed * Time.deltaTime;
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            // executes the jump function when pressing space
             Jump();
         }
 
@@ -57,12 +70,15 @@ public class PlayerMovement : MonoBehaviour
 
         if (transform.position.y <= deathYLevel)
         {
+            // if player dies, player respawns
             Respawn();
         }
 
         CheckForDamage();
     }
-
+    /// <summary>
+    /// hitting space bar mkaes the player jump
+    /// </summary>
     private void Jump()
     {
         RaycastHit hit;
@@ -81,7 +97,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     /// <summary>
-    /// colletvs any coins
+    /// collects wumpa fruits
     /// </summary>
     /// <param name="other">the object being collided with</param>
     private void OnTriggerEnter(Collider other)
@@ -109,7 +125,9 @@ public class PlayerMovement : MonoBehaviour
 
     
 
-
+    /// <summary>
+    /// if player dies, player loses a life and respawns 
+    /// </summary>
     private void Respawn()
     {
         // teleport player to starting position and cause the player to lose a life
