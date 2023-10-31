@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -18,8 +19,9 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector3 startPos;
 
-    
-
+    public int maxHealth = 3;
+    public int healthPoints;
+    public int Damage = 1;
 
 
 
@@ -31,6 +33,9 @@ public class PlayerMovement : MonoBehaviour
 
         // set the starting position
         startPos = transform.position;
+
+        //
+        healthPoints = maxHealth;
     }
 
     // Update is called once per frame
@@ -102,7 +107,7 @@ public class PlayerMovement : MonoBehaviour
     /// <param name="other">the object being collided with</param>
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Wumpa Fruit")
+        if (other.gameObject.tag == "WumpaFruit")
         {
             totalWumpaFruit++;
             other.gameObject.SetActive(false);
@@ -110,7 +115,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (other.gameObject.tag == "Enemy")
         {
-            Respawn();
+            TakeDamage();
         }
 
         if (other.gameObject.tag == "Spike")
@@ -154,8 +159,40 @@ public class PlayerMovement : MonoBehaviour
             // check to see if the object hitting the player is tagged Womp
             if (hit.collider.tag == "Enemy")
             {
-                Respawn();
+                // 
+                
+                TakeDamage();
             }
+        }
+    }
+
+    /// <summary>
+    ///  has player take damage
+    /// </summary>
+    private void TakeDamage()
+    {
+        // sets HP to new value
+        healthPoints -= Damage;
+        // if health is <= 0, triggers respawn
+        if(healthPoints <= 0 )
+        {
+            Respawn();
+        }
+
+
+
+    }
+    /// <summary>
+    ///  this is  the pit function
+    /// </summary>
+    /// <param name="other"> pit </param>
+    private void OnTriggerEnter(Collision other)
+    {
+        // if touches the eath plaen, respawn
+        if (other.gameObject.tag == "Death Plane")
+        {
+           
+            Respawn();
         }
     }
 

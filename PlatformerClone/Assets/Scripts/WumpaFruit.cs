@@ -8,8 +8,8 @@ using UnityEngine;
 // wumpa fruit
 public class WumpaFruit : MonoBehaviour
 {
-    public int totalWumpaFruit;
 
+    public float rotateSpeed;
 
 
 
@@ -23,10 +23,10 @@ public class WumpaFruit : MonoBehaviour
     void Update()
     {
         // rotate at "X" amount of degrees
-        transform.Rotate(Vector3.right * 360 * Time.deltaTime);
+        transform.Rotate(0, rotateSpeed, 0, Space.World );
+
 
         
-            
             
            
     }

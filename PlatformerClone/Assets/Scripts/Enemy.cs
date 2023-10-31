@@ -10,8 +10,8 @@ public class Enemy : MonoBehaviour
 
     private float startingX;
     private bool movingRight = true;
-
-
+    
+    
 
 
 
@@ -38,6 +38,7 @@ public class Enemy : MonoBehaviour
             else
             {
                 movingRight = false;
+                
             }
         }
         else
@@ -47,15 +48,15 @@ public class Enemy : MonoBehaviour
             {
                 transform.position += Vector3.left * speed * Time.deltaTime;
             }
-            // if the object goes too far left, tell it to move right
+            // if the object goes too far left, move right
             else
             {
                 movingRight = true;
             }
         }
+        
 
-
-
+        
 
     }
 
