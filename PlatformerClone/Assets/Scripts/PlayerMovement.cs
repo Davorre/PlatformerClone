@@ -22,7 +22,7 @@ public class PlayerMovement : MonoBehaviour
     public int maxHealth = 3;
     public int healthPoints;
     public int Damage = 1;
-
+    public int spinSpeed;
 
 
     // Start is called before the first frame update
@@ -69,7 +69,11 @@ public class PlayerMovement : MonoBehaviour
             // executes the jump function when pressing space
             Jump();
         }
-
+        if(Input.GetKey(KeyCode.E))
+        {
+            // does spin attack
+            SpinAttack();
+        }
         Debug.DrawLine(transform.position, transform.position + Vector3.down * 1.3f, Color.red);
 
 
@@ -190,12 +194,17 @@ public class PlayerMovement : MonoBehaviour
     /// <param name="other"> pit </param>
     private void OnTriggerEnter(Collision other)
     {
-        // if touches the eath plaen, respawn
+        // if touches the eath plane, respawn
         if (other.gameObject.tag == "Death Plane")
         {
            
             Respawn();
         }
+    }
+
+    private void SpinAttack()
+    {
+        transform.Rotate(0, spinSpeed, 0, Space.World);
     }
 
 
