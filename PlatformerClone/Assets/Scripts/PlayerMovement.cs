@@ -118,10 +118,12 @@ public class PlayerMovement : MonoBehaviour
             TakeDamage();
         }
 
-        if (other.gameObject.tag == "Spike")
+        if (other.gameObject.tag == "SpikedEnemy")
         {
-            Respawn();
+            TakeDamage();
         }
+
+        
 
        
 
