@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class PlayerControllerTest : MonoBehaviour
 {
+    public int hp;
+    public int lives;
+    public int wumpaFruit;
+
     // Start is called before the first frame update
     void Start()
     {
