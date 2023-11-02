@@ -7,6 +7,8 @@ TagManager:
   - Enemy
   - WumpaFruit
   - SpikedEnemy
+  - Arms
+  - ShieldEnemy
   layers:
   - Default
   - TransparentFX

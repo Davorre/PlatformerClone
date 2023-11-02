@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class ShieldEnemy : MonoBehaviour
 {
     public float travelDistanceRight = 0;
     public float travelDistanceLeft = 0;
@@ -10,17 +11,11 @@ public class Enemy : MonoBehaviour
 
     private float startingX;
     private bool movingRight = true;
-    
-    
-
-
 
     // Start is called before the first frame update
     void Start()
     {
-        // when the scene starts, stores the initial x value of the object
-        startingX = transform.position.x;
-
+        
 
 
     }
@@ -28,6 +23,7 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (movingRight)
         {
             // if the object is not farther than the start position plus the right travel distance, it can move right
@@ -38,7 +34,7 @@ public class Enemy : MonoBehaviour
             else
             {
                 movingRight = false;
-                
+
             }
         }
         else
@@ -54,13 +50,11 @@ public class Enemy : MonoBehaviour
                 movingRight = true;
             }
         }
-        
-        
-
-        
 
     }
 
     
+
+
 
 }

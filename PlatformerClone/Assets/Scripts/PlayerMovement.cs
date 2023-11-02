@@ -8,7 +8,7 @@ public class PlayerMovement : MonoBehaviour
     public int Lives = 3;
 
     public float speed = 10f;
-
+    
     public float jumpForce = 10f;
 
     private Rigidbody rigidbodyRef;
@@ -83,8 +83,13 @@ public class PlayerMovement : MonoBehaviour
             Respawn();
         }
 
+        
+       
+
+
         CheckForDamage();
     }
+
     /// <summary>
     /// hitting space bar mkaes the player jump
     /// </summary>
@@ -127,7 +132,10 @@ public class PlayerMovement : MonoBehaviour
             TakeDamage();
         }
 
-        
+        if(other.gameObject.tag == "ShieldEnemy")
+        {
+            TakeDamage();
+        }
 
        
 
@@ -200,11 +208,34 @@ public class PlayerMovement : MonoBehaviour
            
             Respawn();
         }
+
+    }
+
+    public void Kill()
+    {
+        Destroy(gameObject);
+    }
+
+    private void CheckForShieldEnemy()
+    {
+        RaycastHit hit;
+        // raycast upwards, the raycast will return true if it hits an object
+        // raycast (startPos, direction, output iht, distance for ray
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 1))
+        {
+            // check to see if the object hitting the player is tagged Womp
+            if (hit.collider.tag == "ShieldEnemy")
+            {
+
+                Kill();
+
+            }
+        }
     }
 
     private void SpinAttack()
     {
-        transform.Rotate(0, spinSpeed, 0, Space.World);
+       
     }
 
 
