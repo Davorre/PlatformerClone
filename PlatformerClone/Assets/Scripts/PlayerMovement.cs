@@ -235,8 +235,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void SpinAttack()
     {
-       
 
+        transform.Rotate(180, Time.deltaTime, 0);
 
     }
 
