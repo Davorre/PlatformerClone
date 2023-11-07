@@ -127,7 +127,7 @@ public class PlayerMovement : MonoBehaviour
             TakeDamage();
         }
 
-        if (other.gameObject.tag == "SpikedEnemy")
+        if (other.gameObject.tag == "SpikedEnemyTurtle")
         {
             TakeDamage();
         }
