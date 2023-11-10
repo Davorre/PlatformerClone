@@ -23,7 +23,7 @@ public class PlayerMovement : MonoBehaviour
     public int healthPoints;
     public int Damage = 1;
     public int spinSpeed;
-
+    private Vector3 TeleportPoint;
 
     // Start is called before the first frame update
     void Start()
@@ -127,7 +127,7 @@ public class PlayerMovement : MonoBehaviour
             TakeDamage();
         }
 
-        if (other.gameObject.tag == "SpikedEnemy")
+        if (other.gameObject.tag == "SpikedEnemyTurtle")
         {
             TakeDamage();
         }
@@ -137,7 +137,18 @@ public class PlayerMovement : MonoBehaviour
             TakeDamage();
         }
 
-       
+        if (other.gameObject.tag == "Spike")
+        {
+            TakeDamage();
+        }
+
+        if (other.gameObject.tag == "Teleporter")
+        {
+            //
+            TeleportPoint = other.gameObject.GetComponent<Teleporter>().spawnPoint.transform.position;
+            //
+            transform.position = TeleportPoint;
+        }
 
 
     }
@@ -235,7 +246,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void SpinAttack()
     {
-       
+
+        transform.Rotate(180, Time.deltaTime, 0);
+
     }
 
 

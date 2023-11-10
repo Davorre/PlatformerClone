@@ -6,9 +6,12 @@ TagManager:
   tags:
   - Enemy
   - WumpaFruit
-  - SpikedEnemy
   - Arms
   - ShieldEnemy
+  - SpikedEnemyTurtle
+  - Teleporter
+  - TeleportPoint
+  - Spike
   layers:
   - Default
   - TransparentFX
