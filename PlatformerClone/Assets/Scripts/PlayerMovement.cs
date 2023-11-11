@@ -2,28 +2,37 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
+using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
+    // Player values
     public int Lives = 3;
-
-    public float speed = 10f;
-    
+    public float speed = 10f;    
     public float jumpForce = 10f;
-
     private Rigidbody rigidbodyRef;
-
-    public int totalWumpaFruit;
-
-    public float deathYLevel = -3f;
-
     private Vector3 startPos;
-
     public int maxHealth = 3;
     public int healthPoints;
+    public float bounceForce;
+
+    // Score value
+    public int totalWumpaFruit;
+
+    // Death from falling out of bounds
+    public float deathYLevel = -10f;
+
+    // Enemy Value
     public int Damage = 1;
-    public int spinSpeed;
+  
+    // Teleport Point
     private Vector3 TeleportPoint;
+
+    // Spin attack values
+    public float spinDuration;
+    public Collider spinAttackCollider;
+    private bool isSpinning = false;
 
     // Start is called before the first frame update
     void Start()
@@ -34,7 +43,7 @@ public class PlayerMovement : MonoBehaviour
         // set the starting position
         startPos = transform.position;
 
-        //
+        //Sets your health to max health at the start
         healthPoints = maxHealth;
     }
 
@@ -69,10 +78,11 @@ public class PlayerMovement : MonoBehaviour
             // executes the jump function when pressing space
             Jump();
         }
-        if(Input.GetKey(KeyCode.E))
+
+        // Press E to spin attack
+        if (Input.GetKeyDown(KeyCode.E) && !isSpinning)
         {
-            // does spin attack
-            SpinAttack();
+            StartCoroutine(SpinAttack());
         }
         Debug.DrawLine(transform.position, transform.position + Vector3.down * 1.3f, Color.red);
 
@@ -82,10 +92,6 @@ public class PlayerMovement : MonoBehaviour
             // if player dies, player respawns
             Respawn();
         }
-
-        
-       
-
 
         CheckForDamage();
     }
@@ -116,12 +122,14 @@ public class PlayerMovement : MonoBehaviour
     /// <param name="other">the object being collided with</param>
     private void OnTriggerEnter(Collider other)
     {
+        // Collects fruit and scores it
         if (other.gameObject.tag == "WumpaFruit")
         {
             totalWumpaFruit++;
             other.gameObject.SetActive(false);
         }
 
+        // Enemy damage
         if (other.gameObject.tag == "Enemy")
         {
             TakeDamage();
@@ -142,18 +150,49 @@ public class PlayerMovement : MonoBehaviour
             TakeDamage();
         }
 
+        // If player stands on teleporter, move to the next area
         if (other.gameObject.tag == "Teleporter")
         {
-            //
             TeleportPoint = other.gameObject.GetComponent<Teleporter>().spawnPoint.transform.position;
-            //
             transform.position = TeleportPoint;
         }
 
+        // if touches the eath plane, respawn
+        if (other.gameObject.tag == "Death Plane")
+        {
+
+            Respawn();
+        }
+
+        // if enemy is within spinning range kill enemy
+        if (isSpinning && other.gameObject.tag == "Enemy")
+        {
+            // Handle enemy defeat or damage here
+            other.gameObject.SetActive(false);
+        }
 
     }
 
-    
+    /// <summary>
+    /// Spin attack function, checks if an enemy is within the spin attack collider and will kill it
+    /// </summary>
+    /// <returns>continues spin attack for x seconds as stated in editor</returns>
+    private IEnumerator SpinAttack()
+    {
+        // sets spinning to true
+        isSpinning = true;
+        // enables spin attack collider
+        spinAttackCollider.enabled = true;
+
+        // continues spin attack for x seconds as stated in editor
+        yield return new WaitForSeconds(spinDuration);
+
+        // disables after timer
+        spinAttackCollider.enabled = false;
+        isSpinning = false;
+    }
+
+
 
     /// <summary>
     /// if player dies, player loses a life and respawns 
@@ -163,11 +202,13 @@ public class PlayerMovement : MonoBehaviour
         // teleport player to starting position and cause the player to lose a life
         Lives--;
         transform.position = startPos;
+        healthPoints = maxHealth;
 
         if (Lives == 0)
         {
             // add code that end the game, by loading the end screen
             Debug.Log("Game Ends");
+            SceneManager.LoadScene(2);
         }
     }
 
@@ -204,28 +245,19 @@ public class PlayerMovement : MonoBehaviour
             Respawn();
         }
 
-
-
     }
+
     /// <summary>
-    ///  this is  the pit function
+    /// kills game object
     /// </summary>
-    /// <param name="other"> pit </param>
-    private void OnTriggerEnter(Collision other)
-    {
-        // if touches the eath plane, respawn
-        if (other.gameObject.tag == "Death Plane")
-        {
-           
-            Respawn();
-        }
-
-    }
-
     public void Kill()
     {
         Destroy(gameObject);
     }
+
+    /// <summary>
+    /// Checks for the enemy that cannot be damaged by jumping on it
+    /// </summary>
 
     private void CheckForShieldEnemy()
     {
@@ -243,13 +275,54 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
-
-    private void SpinAttack()
+    void OnCollisionEnter(Collision collision)
     {
-
-        transform.Rotate(180, Time.deltaTime, 0);
-
+        if (collision.gameObject.tag == "ShieldEnemy")
+        {
+            // Check if the player is above the enemy
+            if (IsPlayerAboveEnemy(collision.transform))
+            {
+                // Bounce off the enemy without taking damage
+                BounceOff();
+            }
+        }
+        else if (collision.gameObject.tag == "Enemy")
+        {
+            // Check if the player is above the enemy
+            if (IsPlayerAboveEnemy(collision.transform))
+            {
+                // Defeat the enemy and bounce off
+                Destroy(collision.gameObject);
+                BounceOff();
+            }
+            else
+            {
+                // Take damage if not landing on top of the enemy
+                TakeDamage();
+            }
+        }
     }
 
+
+    bool IsPlayerAboveEnemy(Transform enemyTransform)
+    {
+        // Raycast logic or position comparison to check if the player is above
+        RaycastHit hit;
+        // Cast a ray straight down from the player
+        if (Physics.Raycast(transform.position, Vector3.down, out hit))
+        {
+            // Check if the ray hits the enemy GameObject
+            return hit.collider.transform == enemyTransform;
+        }
+
+        return false;
+    }
+
+
+    void BounceOff()
+    {
+        // Add a force upwards to make the player bounce off
+        rigidbodyRef.AddForce(Vector3.up * bounceForce, ForceMode.Impulse);
+    }
 
 }

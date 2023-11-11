@@ -13,7 +13,7 @@ public class UIManager : MonoBehaviour
 {
 
     // public variables to modulate the UI
-    public PlayerControllerTest playerController;
+    public PlayerMovement PlayerMovement;
     public TMP_Text livesText;
     public TMP_Text hpText;
     public TMP_Text wumpaFruitText;
@@ -22,9 +22,9 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        livesText.text = "Lives: " + playerController.lives;
-        hpText.text = "HP: " + playerController.hp;
-        wumpaFruitText.text = "Wumpa Fruit: " + playerController.wumpaFruit;
+        livesText.text = "Lives: " + PlayerMovement.Lives;
+        hpText.text = "HP: " + PlayerMovement.healthPoints;
+        wumpaFruitText.text = "Wumpa Fruit: " + PlayerMovement.totalWumpaFruit;
     }
     /// <summary>
     /// on click quit game
