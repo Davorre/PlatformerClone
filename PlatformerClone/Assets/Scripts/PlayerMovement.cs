@@ -32,7 +32,7 @@ public class PlayerMovement : MonoBehaviour
     // Spin attack values
     public float spinDuration;
     public Collider spinAttackCollider;
-    private bool isSpinning = false;
+    public bool isSpinning = false;
 
     // Start is called before the first frame update
     void Start()
@@ -144,6 +144,11 @@ public class PlayerMovement : MonoBehaviour
         {
             TakeDamage();
         }
+        if (isSpinning && other.gameObject.tag == "ShieldEnemy")
+        {
+            // Handle the defeat of the ShieldEnemy here
+            other.gameObject.SetActive(false);
+        }
 
         if (other.gameObject.tag == "Spike")
         {
@@ -237,6 +242,7 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     private void TakeDamage()
     {
+        if (isSpinning) return;
         // sets HP to new value
         healthPoints -= Damage;
         // if health is <= 0, triggers respawn
@@ -318,8 +324,13 @@ public class PlayerMovement : MonoBehaviour
         return false;
     }
 
+    public bool IsPlayerAbove(Transform otherTransform)
+    {
+        return transform.position.y > otherTransform.position.y;
+    }
 
-    void BounceOff()
+
+    public void BounceOff()
     {
         // Add a force upwards to make the player bounce off
         rigidbodyRef.AddForce(Vector3.up * bounceForce, ForceMode.Impulse);

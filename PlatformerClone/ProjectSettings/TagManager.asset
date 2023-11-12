@@ -12,6 +12,8 @@ TagManager:
   - Teleporter
   - TeleportPoint
   - Spike
+  - SpikedEnemy
+  - Crate
   layers:
   - Default
   - TransparentFX
